@@ -154,7 +154,7 @@ export class FormApp extends Component {
                         </tr>
                     </tbody >
                 </table >
-                <center><button onClick={this.calcFinalExamBorder}>計算実行</button></center>
+                <button onClick={this.calcFinalExamBorder}>計算実行</button>
             </div >
         );
     }
