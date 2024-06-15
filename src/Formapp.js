@@ -49,17 +49,40 @@ export class FormApp extends Component {
 
     // 対象ランクに必要な最終試験ptを計算
     calcFinalExamBorder() {
-        let radio_elements = document.getElementsByName('aim_rank');
-        let len = radio_elements.length;
+        // ラジオボタンの値（目標ランク）を取得
+        let radio_elements_aim_rank = document.getElementsByName('aim_rank');
+        let len_zim_rank = radio_elements_aim_rank.length;
         let aim_rank_id = '';
 
-
-        for (let i = 0; i < len; i++) {
-            if (radio_elements.item(i).checked) {
-                aim_rank_id = radio_elements.item(i).value;
+        for (let i = 0; i < len_zim_rank; i++) {
+            if (radio_elements_aim_rank.item(i).checked) {
+                aim_rank_id = radio_elements_aim_rank.item(i).value;
             }
         }
 
+        // ラジオボタンの値（最終試験前/後）を取得
+        let radio_elements_final_exam = document.getElementsByName('final_exam');
+        let len_final_exam = radio_elements_final_exam.length;
+        let final_exam = '';
+
+        for (let i = 0; i < len_final_exam; i++) {
+            if (radio_elements_final_exam.item(i).checked) {
+                final_exam = radio_elements_final_exam.item(i).value;
+            }
+        }
+
+        let total_status = this.state.total_status
+        // 最終試験前だった場合，各ステータスに30を追加
+        // ただし，1500がカンストのため超えた分は切り捨て
+
+        if (final_exam === 'before') {
+            let after_vo = Math.min(Number(this.state.vocal) + 30, 1500);
+            let after_da = Math.min(Number(this.state.dance) + 30, 1500);
+            let after_vi = Math.min(Number(this.state.visual) + 30, 1500);
+
+            total_status = after_vo + after_da + after_vi;
+        }
+        console.log(total_status)
 
         let pt_border = 0
         // 狙うランクに応じてptボーダーを設定
@@ -73,16 +96,17 @@ export class FormApp extends Component {
             return
         }
 
+        // 最終試験前だった場合，各種ステータスに30を追加して計算する
+        // ただし，1500がカンストのため超えた分は切り捨て
+
+
+
         // 最終試験1位ボーナスをカット
         pt_border -= 1700;
 
         // ステータス分をカット
+        pt_border -= Math.ceil(total_status * 2.3);
 
-        console.log(pt_border);
-        console.log(this.state.total_status);
-        pt_border -= Math.ceil((this.state.total_status) * 2.3);
-
-        console.log(pt_border);
 
         let need_finalexam_point = 0;
 
@@ -123,7 +147,8 @@ export class FormApp extends Component {
     render() {
         return (
             <div>
-                <h3>学マス 最終試験ランクボーダー計算</h3>
+                <h2>学マス 最終試験ボーダー計算</h2>
+                ※ステータス欄には最終試験終了後のステータスを入力してください
                 <table border="1">
                     <tbody>
                         <tr>
@@ -135,7 +160,10 @@ export class FormApp extends Component {
                         </tr>
 
                         <tr>
-                            <td></td>
+                            <td>
+                                <input type="radio" name="final_exam" value="before" />最終試験前
+                                <input type="radio" name="final_exam" value="after" />最終試験後
+                            </td>
                             <td><input type="text" value={this.state.vocal} onChange={this.setVocal}></input></td>
                             <td><input type="text" value={this.state.dance} onChange={this.setDance}></input></td>
                             <td><input type="text" value={this.state.visual} onChange={this.setVisual}></input></td>
@@ -156,6 +184,7 @@ export class FormApp extends Component {
                 </table >
                 <button onClick={this.calcFinalExamBorder}>計算実行</button>
             </div >
+
         );
     }
 }
