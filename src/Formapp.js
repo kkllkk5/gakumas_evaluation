@@ -148,7 +148,6 @@ export class FormApp extends Component {
         return (
             <div>
                 <h2>学マス 最終試験ボーダー計算</h2>
-                ※ステータス欄には最終試験終了後のステータスを入力してください
                 <table border="1">
                     <tbody>
                         <tr>
