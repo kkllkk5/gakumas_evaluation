@@ -82,6 +82,11 @@ export class FormApp extends Component {
 
             total_status = after_vo + after_da + after_vi;
         }
+        // 何も選択されていない時
+        // 暫定，ラジオボタン側でちゃんと処理させたい
+        else if (final_exam === '') {
+            radio_elements_final_exam.item(1).checked = true
+        }
         console.log(total_status)
 
         let pt_border = 0
