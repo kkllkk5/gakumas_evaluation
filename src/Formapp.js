@@ -9,6 +9,7 @@ export class FormApp extends Component {
             vocal: 0,
             dance: 0,
             visual: 0,
+            aim_pt: 0,
             total_status: 0,
             need_finalexam_point: 0
         };
@@ -16,6 +17,7 @@ export class FormApp extends Component {
         this.setVocal = this.setVocal.bind(this)
         this.setDance = this.setDance.bind(this)
         this.setVisual = this.setVisual.bind(this)
+        this.setAim_pt = this.setAim_pt.bind(this)
         this.calcFinalExamBorder = this.calcFinalExamBorder.bind(this)
     }
 
@@ -44,6 +46,14 @@ export class FormApp extends Component {
         this.setState({
             visual: newvisual,
             total_status: Number(this.state.vocal) + Number(this.state.dance) + Number(newvisual)
+        });
+    }
+
+    // 目標ptの入力を反映
+    setAim_pt(event) {
+        let newAim_pt = event.target.value;
+        this.setState({
+            aim_pt: newAim_pt
         });
     }
 
@@ -96,6 +106,9 @@ export class FormApp extends Component {
         }
         else if (aim_rank_id === "2") {
             pt_border = 13000
+        }
+        else if (aim_rank_id === "3") {
+            pt_border = Number(this.state.aim_pt)
         }
         else {
             return
@@ -173,12 +186,20 @@ export class FormApp extends Component {
                             <td><input type="text" value={this.state.visual} onChange={this.setVisual}></input></td>
                             <td>{this.state.total_status}</td>
                         </tr>
+                    </tbody>
+                </table>
+                <br></br>
+                <table border="1">
+                    <tbody>
                         <tr>
                             <td>目標ランク</td>
                             <td>
                                 <input type="radio" name="aim_rank" value="1" />A+
                                 <input type="radio" name="aim_rank" value="2" />S
+                                <input type="radio" name="aim_rank" value="3" />任意の目標pt
+                                <input type="text" value={this.state.aim_pt} onChange={this.setAim_pt} />
                             </td>
+
                         </tr>
                         <tr>
                             <td>必要な最終試験pt</td>
@@ -187,6 +208,10 @@ export class FormApp extends Component {
                     </tbody >
                 </table >
                 <button onClick={this.calcFinalExamBorder}>計算実行</button>
+
+                <br></br>
+                <b>※難易度はプロを想定しています．<br></br></b>
+                <b>※最終試験で1位をとる前提で計算しています．</b>
             </div >
 
         );
