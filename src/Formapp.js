@@ -81,14 +81,30 @@ export class FormApp extends Component {
             }
         }
 
+        // ラジオボタンの値（難易度）を取得
+        let radio_elements_difficulty = document.getElementsByName('difficulty');
+
+        let len_difficulty = radio_elements_difficulty.length;
+        let difficulty = '';
+
+        for (let i = 0; i < len_difficulty; i++) {
+            if (radio_elements_difficulty.item(i).checked) {
+                difficulty = radio_elements_difficulty.item(i).value;
+            }
+        }
+
+        let max_status_arr = [1000, 1500, 1800];
+
+        let max_status = max_status_arr[Number(difficulty)];
+
         let total_status = this.state.total_status
         // 最終試験前だった場合，各ステータスに30を追加
         // ただし，1500がカンストのため超えた分は切り捨て
 
         if (final_exam === 'before') {
-            let after_vo = Math.min(Number(this.state.vocal) + 30, 1500);
-            let after_da = Math.min(Number(this.state.dance) + 30, 1500);
-            let after_vi = Math.min(Number(this.state.visual) + 30, 1500);
+            let after_vo = Math.min(Number(this.state.vocal) + 30, max_status);
+            let after_da = Math.min(Number(this.state.dance) + 30, max_status);
+            let after_vi = Math.min(Number(this.state.visual) + 30, max_status);
 
             total_status = after_vo + after_da + after_vi;
         }
@@ -108,9 +124,13 @@ export class FormApp extends Component {
             pt_border = 13000
         }
         else if (aim_rank_id === "3") {
+            pt_border = 14500
+        }
+        else if (aim_rank_id === "4") {
             pt_border = Number(this.state.aim_pt)
         }
         else {
+            alert("不明なエラー");
             return
         }
 
@@ -192,11 +212,20 @@ export class FormApp extends Component {
                 <table border="1">
                     <tbody>
                         <tr>
+                            <td>難易度</td>
+                            <td>
+                                <input type="radio" name="difficulty" value="1" />レギュラー
+                                <input type="radio" name="difficulty" value="2" />プロ
+                                <input type="radio" name="difficulty" value="3" />マスター
+                            </td>
+                        </tr>
+                        <tr>
                             <td>目標ランク</td>
                             <td>
                                 <input type="radio" name="aim_rank" value="1" />A+
                                 <input type="radio" name="aim_rank" value="2" />S
-                                <input type="radio" name="aim_rank" value="3" />任意の目標pt
+                                <input type="radio" name="aim_rank" value="3" />S+
+                                <input type="radio" name="aim_rank" value="4" />任意の目標pt
                                 <input type="text" value={this.state.aim_pt} onChange={this.setAim_pt} />
                             </td>
 
@@ -210,7 +239,6 @@ export class FormApp extends Component {
                 <button onClick={this.calcFinalExamBorder}>計算実行</button>
 
                 <br></br>
-                <b>※難易度はプロを想定しています．<br></br></b>
                 <b>※最終試験で1位をとる前提で計算しています．</b>
             </div >
 
