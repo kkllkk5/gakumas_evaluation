@@ -214,9 +214,9 @@ export class FormApp extends Component {
                         <tr>
                             <td>難易度</td>
                             <td>
-                                <input type="radio" name="difficulty" value="1" />レギュラー
-                                <input type="radio" name="difficulty" value="2" />プロ
-                                <input type="radio" name="difficulty" value="3" />マスター
+                                <input type="radio" name="difficulty" value="0" />レギュラー
+                                <input type="radio" name="difficulty" value="1" />プロ
+                                <input type="radio" name="difficulty" value="2" />マスター
                             </td>
                         </tr>
                         <tr>
