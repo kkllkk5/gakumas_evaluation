@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 export class FormApp extends Component {
 
+
     constructor(props) {
         super(props);
 
@@ -11,7 +12,19 @@ export class FormApp extends Component {
             visual: 0,
             aim_pt: 0,
             total_status: 0,
-            need_finalexam_point: 0
+            need_finalexam_point: 0,
+            difficulty_map: {
+                "レギュラー": "0",
+                "プロ": "1",
+                "マスター": "2"
+            },
+            rank_id_map: {
+                "A+": "1",
+                "S": "2",
+                "S+": "3",
+                "SS": "4",
+                "other": "99",
+            }
         };
 
         this.setVocal = this.setVocal.bind(this)
@@ -117,16 +130,19 @@ export class FormApp extends Component {
 
         let pt_border = 0
         // 狙うランクに応じてptボーダーを設定
-        if (aim_rank_id === "1") {
+        if (aim_rank_id === this.state.rank_id_map["A+"]) {
             pt_border = 11500
         }
-        else if (aim_rank_id === "2") {
+        else if (aim_rank_id === this.state.rank_id_map["S"]) {
             pt_border = 13000
         }
-        else if (aim_rank_id === "3") {
+        else if (aim_rank_id === this.state.rank_id_map["S+"]) {
             pt_border = 14500
         }
-        else if (aim_rank_id === "4") {
+        else if (aim_rank_id === this.state.rank_id_map["SS"]) {
+            pt_border = 16000
+        }
+        else if (aim_rank_id === this.state.rank_id_map["other"]) {
             pt_border = Number(this.state.aim_pt)
         }
         else {
@@ -186,6 +202,8 @@ export class FormApp extends Component {
         return (
             <div>
                 <h2>学マス 最終試験ボーダー計算</h2>
+
+                <b>※最終試験で1位をとる前提で計算しています．</b>
                 <table border="1">
                     <tbody>
                         <tr>
@@ -214,18 +232,19 @@ export class FormApp extends Component {
                         <tr>
                             <td>難易度</td>
                             <td>
-                                <input type="radio" name="difficulty" value="0" />レギュラー
-                                <input type="radio" name="difficulty" value="1" />プロ
-                                <input type="radio" name="difficulty" value="2" />マスター
+                                <input type="radio" name="difficulty" value={this.state.difficulty_map["レギュラー"]} />レギュラー
+                                <input type="radio" name="difficulty" value={this.state.difficulty_map["プロ"]} />プロ
+                                <input type="radio" name="difficulty" value={this.state.difficulty_map["マスター"]} />マスター
                             </td>
                         </tr>
                         <tr>
                             <td>目標ランク</td>
                             <td>
-                                <input type="radio" name="aim_rank" value="1" />A+
-                                <input type="radio" name="aim_rank" value="2" />S
-                                <input type="radio" name="aim_rank" value="3" />S+
-                                <input type="radio" name="aim_rank" value="4" />任意の目標pt
+                                <input type="radio" name="aim_rank" value={this.state.rank_id_map["A+"]} />A+
+                                <input type="radio" name="aim_rank" value={this.state.rank_id_map["S"]} />S
+                                <input type="radio" name="aim_rank" value={this.state.rank_id_map["S+"]} />S+
+                                <input type="radio" name="aim_rank" value={this.state.rank_id_map["SS"]} />SS
+                                <input type="radio" name="aim_rank" value={this.state.rank_id_map["other"]} />任意の目標pt
                                 <input type="text" value={this.state.aim_pt} onChange={this.setAim_pt} />
                             </td>
 
@@ -239,7 +258,9 @@ export class FormApp extends Component {
                 <button onClick={this.calcFinalExamBorder}>計算実行</button>
 
                 <br></br>
-                <b>※最終試験で1位をとる前提で計算しています．</b>
+                <b>更新履歴</b>
+                <br></br>
+                2024-10-30 目標ランクにSSを追加
             </div >
 
         );
