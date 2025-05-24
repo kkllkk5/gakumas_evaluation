@@ -122,7 +122,7 @@ export class FormApp extends Component {
     // 対象ランクに必要な最終試験ptを計算
     calcFinalExamBorder() {
         // ラジオボタンの値（目標ランク）を取得
-        let radio_elements_aim_rank = document.getElementsByName('aim_rank_nia');
+        let radio_elements_aim_rank = document.getElementsByName('aim_rank');
         let len_zim_rank = radio_elements_aim_rank.length;
         let aim_rank_id = '';
 
